@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8" />
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.5/react.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.5/react-dom.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+ <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
+ </head>
+ <body>
+   <div id='content' class='container'>
+   </div>
+   <script type='text/babel'>
+     //React code goes here
+     class Sticky extends React.Component {
+     		constructor(props) {
+     			super(props);
+     			this.state = {notes: [], nextId: 0, edit: false};
+     			this.addNotes = this.addNotes.bind(this);
+     			this.deleteNote = this.deleteNote.bind(this);
+     		}// end constructor
+
+     		addNotes(e) {
+            e.preventDefault();
+            let notes = [{name: this.refs.name.value, id: this.state.nextId}, ...this.state.notes ];
+            this.refs.name.value = null;
+            this.setState({notes, nextId: ++this.state.nextId, edit: false});
+         } //addNotes
+
+
+        deleteNote(id) {
+        	// alert("delete Note");
+        	let notes = this.state.notes;
+        	let index = notes.findIndex(x=> x.id == id);
+        	notes.splice(index, 1);
+
+        	this.setState({notes, nextId: ++this.state.nextId, edit: false})
+        } //delete
+
+        editz(){
+
+        	if(this.state.edit)
+        	{
+	        	return(
+	        					<div key={'later'}>
+			                <form >
+			                  <input type="text" required placeholder="Note Name" ref="name" />
+			                  <input type="submit" className="btn" value="Add Note" />
+			                </form> 
+		                </div>
+	        		);
+        	} else {
+        		return null;
+        	}
+        }
+
+        editNote(id) {
+        	
+        	let nextId = id;
+        	let edit = [{id: nextId, edit: true}]
+        	let notes = this.state.notes;
+        	let index = notes.findIndex(x=> x.id == id);
+        	this.setState(notes, nextId, edit)
+        	//this.editz();
+        	// alert("edit Note");
+        	// if(edit) {
+        	// 	editz()
+        	// 	console.log("true");
+        	// }
+        	// else{
+        	// 	console.log("false")
+        	// }
+        } //editNote
+
+        notes() {
+
+        	let notes = this.state.notes.map(note => {
+        		return (<div key={'note-' + note.id}>
+	        						<div className='col s10'>{note.name}</div>  
+	        						<div className='col s1 btn information' onClick={() => this.editNote(note.id)}>
+	                    	 Edit
+	                  	</div>
+	        						<div className='col s1 btn red' onClick={() => this.deleteNote(note.id)}>
+	                    	 X
+	                  	</div>
+	                  </div> 
+                   );
+
+        	})
+        	return notes;
+         }
+     		render() {
+     			return(
+     				<div className='center'>
+     					<h1>{this.props.title}</h1>
+                 <div >
+	                  <form onSubmit={this.addNotes}>
+	                     <input type="text" required placeholder="Note Name" ref="name" />
+	                     <input type="submit" className="btn" value="Add Note" />
+	                  </form> 
+                  </div>
+                  <div id={this.editz()}></div>
+                  <h2>All Notes</h2>   
+                  <div className='col s10'>
+                  	{this.notes()}
+                  </div>
+					
+     				</div>
+     				)
+     		}
+     }// end class sticky
+   	ReactDOM.render(<Sticky title='Sticky Notes'/>, document.getElementById('content'));
+   </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
